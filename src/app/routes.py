@@ -269,7 +269,7 @@ def getMedicalHistoriesByDoctorID(current_user, id_doctor):
         return  make_response('Forbidden: Access is denied', 403)
 
     result = medical_histories.dump(MedicalHistory.query\
-                                        .filter_by(id_doctor = id_doctor)
+                                        .filter_by(id_doctor = id_doctor.id)
                                         .all())
     if result:
         return jsonify({"All medical histories" : result })
