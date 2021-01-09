@@ -1,56 +1,114 @@
-//AUTH ENDPOINTS
-POST
-/auth/signup/ -> registrar usuarios
+**API DOCUMENTATION**
+**TOKEN JWT - HEADER EXAMPLE**
+Get when user get login
 
-POST
-/auth/token/refresh/ -> confirmar registros de usuarios
+    x-access-token : TOKEN
 
+POST /auth/signup/ 
+Data Example 
 
-POST
-/auth/recover-password/ -> recuperar contraseñas
+    {
+		"num_doc" : "01",
+		"email" : "test@gmail.com",
+		"password": "01",
+		"telphone" : "01",
+		"rol" : 2
+	}
+	
+POST /auth/confirm-signup/
 
-POST
-/auth/change-password/{id}/ -> cambiar contraseñas
+UUID is your Confirmation Code
+Data Example
 
-POST
-/auth/login/ -> inicio de sesion
+    {
+		"uuid" : "1c8e9ccd-e0f3-4a8e-817d-39fdf03e7854"
+	}
 
-POST
-/auth/complete-signup/ -> registrar datos del usuario
+POST /auth/recover-password/ 
+Data Example
 
+    {
+		"email" : "test@tests.com"
+	}
 
-//HOSPITAL ENDPOINTS
-GET
-/hospitals/clinic-histories/ -> obtiene todas las consultas hechas por los doctores
+POST /auth/change-password/
+Data Example
 
-GET
-/hospitals/clinic-histories/{id_doctor} -> obtiener consulta mediante id
-
-POST
-/hospitals/doctors -> registra doctores
-
-
-
-
-//PATIENTS ENDPOINTS
-POST
-
-GET
-/patients/clinic-history/ -> obtiene la historia medica del paciente
-
-
+    {
+		"new_password" : "123456"
+	}
 
 
-//DOCTORS ENDPOINTS
-POST
-/doctors/clinic-histories/ -> se realiza la consulta medica al paciente
+POST /auth/login/
+Data Example 
 
-GET
-/doctors/clinic-histories/ -> obtiene las historias clinica de los pacientes
+    {
+	    "email" : "test@test.com",
+	    "password": "123456"
+    }
 
-GET
-/doctors/clinic-histories/{patient_id}/ -> obtiene la historia clinica de un paciente
 
+POST /auth/complete-signup/
+Data Example 
+
+USER PATIENT
+
+    {
+		"name" : "Alberto",
+		"address" : "Calle 55H N4-34",
+		"birthday" : "21/12/01"
+	}
+
+USER HOSPITAL
+
+    {
+		"name" : "Alberto",
+		"address" : "Calle 55H N4-34",
+		"id_medicalservice" : "0"
+	}
+
+GET /hospitals/medical-histories/
+
+    NOT DATA
+
+GET /hospitals/medical-histories/< id_doctor >/
+
+    NOT DATA
+POST /hospitals/doctors/
+Data Example 
+
+
+    {
+		"num_doc" : "02",
+		"email":"doctor@doctor.io",
+		"password":"123456",
+		"telphone" : "30052525252",
+		"name" : "Juan Perez",
+		"address" : "Cra 45 #100-14",
+		"id_medicalservice" : "0",
+		"birthdate" : "12/06/00"
+	}
+
+GET /patients/medical-history/
+
+    NOT DATA
+
+POST /doctors/medical-histories/
+
+    {
+		"id_patient" : "1",
+		"id_patientstatus" : "1",
+		"id_specialty" : "1",
+		"observation" : "El paciente se encuentra estable"
+	}
+
+GET /doctors/medical-histories/ 
+
+    NOT DATA
+
+GET /doctors/medical-histories/< id_patient >
+
+    NOT DATA
 
 
 
