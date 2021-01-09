@@ -1,26 +1,22 @@
 //AUTH ENDPOINTS
 POST
-/auth/signup/ -> registrar usuarios DONE!
+/auth/signup/ -> registrar usuarios
 
 POST
 /auth/token/refresh/ -> confirmar registros de usuarios
 
-data{
-    TOKEN
-}
 
 POST
-/auth/recover-password/ -> recuperar contraseñas DONE!
+/auth/recover-password/ -> recuperar contraseñas
 
 POST
-/auth/change-password/{id}/ -> cambiar contraseñas DONE!
+/auth/change-password/{id}/ -> cambiar contraseñas
 
 POST
-/auth/login/ -> inicio de sesion DONE!
+/auth/login/ -> inicio de sesion
 
 POST
-/auth/complete-signup/ -> registrar datos del usuario DONE!
-
+/auth/complete-signup/ -> registrar datos del usuario
 
 
 //HOSPITAL ENDPOINTS
@@ -33,9 +29,6 @@ GET
 POST
 /hospitals/doctors -> registra doctores
 
-data{
-    DOCTOR
-}
 
 
 
@@ -51,10 +44,6 @@ GET
 //DOCTORS ENDPOINTS
 POST
 /doctors/clinic-histories/ -> se realiza la consulta medica al paciente
-
-data{
-    HISTORY
-}
 
 GET
 /doctors/clinic-histories/ -> obtiene las historias clinica de los pacientes

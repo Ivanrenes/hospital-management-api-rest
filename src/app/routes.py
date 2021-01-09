@@ -51,8 +51,7 @@ def index():
         "message from 1v4nC0d3" : "Welcome to my API!",
         "routes":"/",
         "methods":"POST, PUT, DELETE, GET",
-        "type":"JSON",
-        "data_structure":"title, description"
+        "data-typ":"JSON"
     })
 
 """ AUTH MODULE """
