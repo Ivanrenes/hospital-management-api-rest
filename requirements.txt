@@ -1,0 +1,16 @@
+flask
+flask_sqlalchemy
+flask_marshmallow
+flask_restful
+flask_migrate
+flask_jwt
+flask_uuid
+make_response
+jsonify
+PyJWT
+psycopg2-binary
+marshmallow_sqlalchemy
+make_response
+
+
+
