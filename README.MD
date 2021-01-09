@@ -16,3 +16,9 @@
 
 **API DOCUMENTATION**
 ./api-routes.md - SIMPLE DOCUMENTATION
+
+**API TESTING**
+
+> You can try all routes with this POSTMAN Collection.
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/ea5dc1e6f60cdb86fa8e)
