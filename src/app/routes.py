@@ -69,7 +69,7 @@ def signup():
 
     if rol > 2 or rol <= 0:
         return jsonify({"message" : "Just 2 types of users allowed by this sign up",
-                        "types" : "USER, 1 for PATIENT, 2 for HOSPITAL"})
+                        "types" : "USER, 1 for PATIENT, 2 for HOSPITAL"}), 422
 
     #CHECKING FOR EXISTING USER
     user =  user = User.query\
@@ -89,9 +89,9 @@ def signup():
         db.session.commit()
         return jsonify({'message' : 'Successfully registered',
                         'important' : 'Confirmation code was sent to your email',
-                        'confirmation_code' : uuid})
+                        'confirmation_code' : uuid}), 201
     else:
-        return make_response('User already exists. Please Log in.', 400)
+        return make_response('User already exists. Please Log in.', 409)
 
 @app.route('/auth/login', methods=['POST'])
 def login():
@@ -147,11 +147,11 @@ def recoverPassword():
     .first()
 
     if not email:
-        return jsonify({"message" : "Please send the email"})
+        return jsonify({"message" : "Please send the email"}), 422
     if user:
-        return jsonify({"message" : "Password sent to the email"})
+        return jsonify({"message" : "Password sent to the email"}), 200
     else:
-        return jsonify({"message" : "Not user found"})
+        return jsonify({"message" : "Not user found"}), 404
 
 
 @app.route('/auth/change-password', methods=['POST'])
@@ -168,12 +168,12 @@ def changePassword(current_user):
                 .first()
             doctor.password_changed = 1
             db.session.commit()
-            return jsonify({"message" : "Doctor password changed succesfully"})
+            return jsonify({"message" : "Doctor password changed succesfully"}), 200
 
         db.session.commit()
-        return jsonify({"message" : "Password changed succesfully"})
+        return jsonify({"message" : "Password changed succesfully"}), 200
     else:
-        return jsonify({"message" : "Please send the new password"})
+        return jsonify({"message" : "Please send the new password"}), 422
 
 
 @app.route('/auth/confirm-signup', methods=['POST'])
@@ -185,9 +185,9 @@ def confirmSignup(current_user):
     if confirm_code == auth['uuid']:
         current_user.account_verified = 1
         db.session.commit()
-        return jsonify({"message" : "Your account was verified succesfully"})
+        return jsonify({"message" : "Your account was verified succesfully"}), 200
     else:
-        return jsonify({"message" : "Confirm code wrong!"})
+        return jsonify({"message" : "Confirm code wrong!"}), 422
 
 
 
@@ -206,7 +206,7 @@ def completeSignUp(current_user):
                     .first()
 
     if patient or hospital or current_user.rol == 3:
-        return jsonify({"message" : "Sign up have completed yet"})
+        return jsonify({"message" : "Sign up have been completed yet"}), 409
     #PATIENT
     if current_user.rol == 1:
         name = auth['name']
@@ -221,7 +221,7 @@ def completeSignUp(current_user):
         else:
             db.session.add(complete_signup)
             db.session.commit()
-            return jsonify({'message' : 'Sign Up Completed Successfully'})
+            return jsonify({'message' : 'Sign Up Completed Successfully'}), 200
 
 
     #HOSPITAL
@@ -235,11 +235,11 @@ def completeSignUp(current_user):
 
 
         if not name or not address or not id_medicalservice:
-            return make_response('Hospital information incomplete', 400)
+            return make_response('Hospital information incomplete', 422)
         else:
             db.session.add(complete_signup)
             db.session.commit()
-            return jsonify({'message' : 'Sign Up Completed Successfully'})
+            return jsonify({'message' : 'Sign Up Completed Successfully'}), 200
 
 
 
@@ -328,7 +328,7 @@ def signUpDoctor(current_user):
     id_hospital = hospital.id
 
     if not data or not name or not address or not id_medicalservice or not birthdate:
-        return make_response('Doctor information incomplete', 400)
+        return make_response('Doctor information incomplete', 422)
 
 
     new_doctor = Doctor(name, address, birthdate, password_changed, id_medicalservice, id_user, id_hospital)
@@ -336,7 +336,7 @@ def signUpDoctor(current_user):
     db.session.commit()
     return jsonify({'message' : 'Doctor successfully registered',
                     'important' : 'Confirmation code was sent to Doctor email',
-                    'confirmation_code' : uuid})
+                    'confirmation_code' : uuid}), 201
 
 
 
@@ -388,13 +388,13 @@ def addMedicalHistory(current_user):
     observation = data['observation']
 
     if not data or not id_patientstatus or not id_specialty or not observation:
-        return make_response('Medical History information incomplete', 400)
+        return make_response('Medical History information incomplete', 422)
 
     new_medicalhistory = MedicalHistory(id_patient, id_doctor, id_patientstatus, id_specialty, observation)
     db.session.add(new_medicalhistory)
     db.session.commit()
 
-    return jsonify({"message" : "Medical History registered succesfully"}), 200
+    return jsonify({"message" : "Medical History registered succesfully"}), 201
 
 
 @app.route('/doctors/medical-histories', methods=['GET'])
@@ -437,9 +437,9 @@ def getMedicalHistoryByPatientID(current_user, id_patient):
                                             .filter_by(id_patient = id_patient)
                                             .all())
     if result:
-        return jsonify({"All medical histories" : result })
+        return jsonify({"All medical histories" : result }), 200
     else:
-        return jsonify({"message" : "Not medical histories found"})
+        return jsonify({"message" : "Not medical histories found"}), 404
 
 
 
