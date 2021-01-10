@@ -4,7 +4,7 @@ Get when user get login
 
     x-access-token : TOKEN
 
-POST /auth/signup/ 
+POST /auth/signup 
 Data Example 
 
     {
@@ -15,7 +15,7 @@ Data Example
 		"rol" : 2
 	}
 	
-POST /auth/confirm-signup/
+POST /auth/confirm-signup
 
 UUID is your Confirmation Code
 Data Example
@@ -24,14 +24,14 @@ Data Example
 		"uuid" : "1c8e9ccd-e0f3-4a8e-817d-39fdf03e7854"
 	}
 
-POST /auth/recover-password/ 
+POST /auth/recover-password 
 Data Example
 
     {
 		"email" : "test@tests.com"
 	}
 
-POST /auth/change-password/
+POST /auth/change-password
 Data Example
 
     {
@@ -39,7 +39,7 @@ Data Example
 	}
 
 
-POST /auth/login/
+POST /auth/login
 Data Example 
 
     {
@@ -48,7 +48,7 @@ Data Example
     }
 
 
-POST /auth/complete-signup/
+POST /auth/complete-signup
 Data Example 
 
 USER PATIENT
@@ -67,14 +67,14 @@ USER HOSPITAL
 		"id_medicalservice" : "0"
 	}
 
-GET /hospitals/medical-histories/
+GET /hospitals/medical-histories
 
     NOT DATA
 
 GET /hospitals/medical-histories/< id_doctor >/
 
     NOT DATA
-POST /hospitals/doctors/
+POST /hospitals/doctors
 Data Example 
 
 
@@ -89,11 +89,11 @@ Data Example
 		"birthdate" : "12/06/00"
 	}
 
-GET /patients/medical-history/
+GET /patients/medical-history
 
     NOT DATA
 
-POST /doctors/medical-histories/
+POST /doctors/medical-histories
 
     {
 		"id_patient" : "1",
@@ -102,22 +102,10 @@ POST /doctors/medical-histories/
 		"observation" : "El paciente se encuentra estable"
 	}
 
-GET /doctors/medical-histories/ 
+GET /doctors/medical-histories
 
     NOT DATA
 
-GET /doctors/medical-histories/< id_patient >
+GET /doctors/medical-histories/< id_patient >/
 
     NOT DATA
-
-
-
-
-
-
-
-
-
-
-
-
