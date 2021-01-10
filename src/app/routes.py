@@ -59,7 +59,7 @@ def index():
 def signup():
 
     auth = request.json
-    num_doc = auth['numdoc']
+    num_doc = auth['num_doc']
     email = auth['email']
     password = auth['password']
     telphone = auth['telphone']
