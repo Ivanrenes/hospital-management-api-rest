@@ -86,23 +86,23 @@ class Doctor(db.Model):
     address = db.Column(db.String(70))
     birthdate = db.Column(db.Date())
     password_changed = db.Column(db.Integer)
-    id_medicalservice = db.Column(db.Integer)
+    id_medicalspecialty = db.Column(db.Integer)
     id_user = db.Column(db.Integer)
     id_hospital = db.Column(db.Integer)
 
 
-    def __init__(self, name, address, birthdate,password_changed, id_medicalservice, id_user, id_hospital):
+    def __init__(self, name, address, birthdate,password_changed, id_medicalspecialty, id_user, id_hospital):
         self.name = name
         self.address = address
         self.birthdate = birthdate
         self.password_changed = password_changed
-        self.id_medicalservice = id_medicalservice
+        self.id_medicalspecialty = id_medicalspecialty
         self.id_user  = id_user
         self.id_hospital = id_hospital
 
 class DoctorSchema(ma.Schema):
     class Meta:
-        fields = ('id','name','address','birthdate','id_medicalservice','id_user', 'id_hospital')
+        fields = ('id','name','address','birthdate','id_medicalspecialty','id_user', 'id_hospital')
 
 doctor_schema = DoctorSchema()
 doctors_schema = DoctorSchema(many=True)
@@ -186,19 +186,19 @@ class MedicalHistory(db.Model):
     id_patient = db.Column(db.Integer)
     id_doctor = db.Column(db.Integer)
     id_patientstatus = db.Column(db.Integer)
-    id_specialty = db.Column(db.Integer)
+    id_medicalspecialty = db.Column(db.Integer)
     observation = db.Column(db.String(244))
 
-    def __init__(self, id_patient, id_doctor, id_patientstatus, id_specialty, observation):
+    def __init__(self, id_patient, id_doctor, id_patientstatus, id_medicalspecialty, observation):
         self.id_patient = id_patient
         self.id_doctor = id_doctor
         self.id_patientstatus = id_patientstatus
-        self.id_specialty = id_specialty
+        self.id_medicalspecialty = id_medicalspecialty
         self.observation = observation
 
 class MedicalHistorySchema(ma.Schema):
     class Meta:
-        fields = ('id','id_patient','id_doctor','id_patientstatus','id_specialty','observation')
+        fields = ('id','id_patient','id_doctor','id_patientstatus','id_medicalspecialty','observation')
 
 medical_history = MedicalHistorySchema()
 medical_histories = MedicalHistorySchema(many=True)

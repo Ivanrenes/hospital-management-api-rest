@@ -161,7 +161,7 @@ def recoverPassword():
     if user:
         user.password = generate_password_hash(new_password, method='sha256')
         db.session.commit()
-        return jsonify({"message" : "Se ha restablecido su contraseña exitosamente"}), 200
+        return jsonify({"message" : "Password reset succesfully "}), 200
     else:
         return jsonify({"message" : "Not user found"}), 404
 
@@ -181,7 +181,7 @@ def changePassword(current_user):
                 .first()
             doctor.password_changed = 1
             db.session.commit()
-            return jsonify({"message" : "Doctor password changed succesfully"}), 200
+            return jsonify({"message" : "Password changed succesfully"}), 200
 
         db.session.commit()
         return jsonify({"message" : "Password changed succesfully"}), 200
@@ -233,7 +233,7 @@ def completeSignUp(current_user):
         complete_signup = Patient(name, address, birthdate, id_user)
 
         if not name or not address or not birthdate:
-            return make_response('Patient information incomplete', 400)
+            return make_response('Patient information incomplete', 422)
         else:
             db.session.add(complete_signup)
             db.session.commit()
@@ -342,16 +342,16 @@ def signUpDoctor(current_user):
     name = data['name']
     address = data['address']
     password_changed = 0
-    id_medicalservice = data['id_medicalservice']
+    id_medicalspecialty = data['id_medicalspecialty']
     birthdate = datetime.strptime(data['birthdate'], '%d/%m/%y')
     id_user = user.id
     id_hospital = hospital.id
 
-    if not data or not name or not address or not id_medicalservice or not birthdate:
+    if not data or not name or not address or not id_medicalspecialty or not birthdate:
         return make_response('Doctor information incomplete', 422)
 
 
-    new_doctor = Doctor(name, address, birthdate, password_changed, id_medicalservice, id_user, id_hospital)
+    new_doctor = Doctor(name, address, birthdate, password_changed, id_medicalspecialty, id_user, id_hospital)
     db.session.add(new_doctor)
     db.session.commit()
     return jsonify({'message' : 'Doctor successfully registered',
@@ -397,6 +397,9 @@ def addMedicalHistory(current_user):
         .filter_by(id_user = current_user.id)\
         .first()
 
+    if not doctor:
+        return jsonify({"message" : "Forbidde: Access denid, sign up incomplete"})
+
     if doctor.password_changed == 0:
         return  make_response('Forbidden: Change your password for get access', 403)
 
@@ -404,13 +407,13 @@ def addMedicalHistory(current_user):
     id_patient = data['id_patient']
     id_doctor = doctor.id
     id_patientstatus = data['id_patientstatus']
-    id_specialty = data['id_specialty']
+    id_medicalspecialty = doctor.id_medicalspecialty
     observation = data['observation']
 
-    if not data or not id_patientstatus or not id_specialty or not observation:
+    if not data or not id_patientstatus or not observation:
         return make_response('Medical History information incomplete', 422)
 
-    new_medicalhistory = MedicalHistory(id_patient, id_doctor, id_patientstatus, id_specialty, observation)
+    new_medicalhistory = MedicalHistory(id_patient, id_doctor, id_patientstatus, id_medicalspecialty, observation)
     db.session.add(new_medicalhistory)
     db.session.commit()
 
@@ -426,6 +429,9 @@ def getMedicalHistories(current_user):
     doctor = Doctor.query\
                 .filter_by(id_user = current_user.id)\
                 .first()
+
+    if not doctor:
+        return jsonify({"message" : "Forbidde: Access denid, sign up incomplete"})
 
     if doctor.password_changed == 0:
         return  make_response('Forbidden: Change your password for get access', 403)
@@ -448,6 +454,9 @@ def getMedicalHistoryByPatientID(current_user, id_patient):
     doctor = Doctor.query\
         .filter_by(id_user = current_user.id)\
         .first()
+
+    if not doctor:
+        return jsonify({"message" : "Forbidde: Access denid, sign up incomplete"})
 
     if doctor.password_changed == 0:
         return  make_response('Forbidden: Change your password for get access', 403)
