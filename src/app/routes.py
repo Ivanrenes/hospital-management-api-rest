@@ -6,7 +6,6 @@ from app.models import MedicalHistory, medical_history, medical_histories
 from app.models import Doctor, doctor_schema, doctors_schema
 from  werkzeug.security import generate_password_hash, check_password_hash
 from dataclasses import dataclass
-from datetime import datetime
 #  Here we have PyJWT Authentication
 import jwt
 from datetime import datetime, timedelta
@@ -66,6 +65,10 @@ def signup():
     uuid = random_uuid
     account_verified = 0
     rol = auth['rol']
+
+
+    if not num_doc or not email or not password or not telphone or not rol:
+        return jsonify({"message" : "User information incomplete"}), 422
 
     if rol > 2 or rol <= 0:
         return jsonify({"message" : "Just 2 types of users allowed by this sign up",
@@ -128,7 +131,7 @@ def login():
             'public_id': user.uuid,
             'exp' : datetime.utcnow() + timedelta(minutes = 120)
         }, app.config['SECRET_KEY'])
-        return make_response(jsonify({'token' : token}), 201)
+        return make_response(jsonify({'token' : token}), 200)
 
     # returns 403 if password is wrong
     return make_response(
@@ -140,6 +143,7 @@ def login():
 
 @app.route('/auth/recover-password', methods=['POST'])
 def recoverPassword():
+
     auth = request.json
     email = auth['email']
     user = User.query\
@@ -147,16 +151,17 @@ def recoverPassword():
     .first()
 
     if not email:
-        return jsonify({"message" : "Please send the email"}), 422
+        return jsonify({"message" : "Email information incomplete"}), 422
     if user:
         return jsonify({"message" : "Password sent to the email"}), 200
     else:
         return jsonify({"message" : "Not user found"}), 404
 
 
-@app.route('/auth/change-password', methods=['POST'])
+@app.route('/auth/change-password', methods=['PUT'])
 @token_required
 def changePassword(current_user):
+
     auth = request.json
     new_password = auth['new_password']
 
@@ -194,6 +199,9 @@ def confirmSignup(current_user):
 @app.route('/auth/complete-signup', methods=['POST'])
 @token_required
 def completeSignUp(current_user):
+    if current_user.account_verified == 0:
+        return make_response('Forbidden: First confirm your account', 403)
+
     auth = request.json
 
 
@@ -247,6 +255,8 @@ def completeSignUp(current_user):
 @app.route('/hospitals/medical-histories', methods=['GET'])
 @token_required
 def getMedicalHistoriesByDoctors(current_user):
+    if current_user.account_verified == 0:
+        return make_response('Forbidden: First confirm your account', 403)
 
     if current_user.rol != 2:
         return  make_response('Forbidden: Access is denied', 403)
@@ -263,6 +273,8 @@ def getMedicalHistoriesByDoctors(current_user):
 @app.route('/hospitals/medical-histories/<id_doctor>', methods=['GET'])
 @token_required
 def getMedicalHistoriesByDoctorID(current_user, id_doctor):
+    if current_user.account_verified == 0:
+        return make_response('Forbidden: First confirm your account', 403)
 
     if current_user.rol != 2:
         return  make_response('Forbidden: Access is denied', 403)
