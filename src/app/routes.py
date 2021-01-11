@@ -1,4 +1,5 @@
-from app import app, jsonify, request, db,  ma, uuid, make_response
+from app import app, jsonify, request, db,  ma, uuid, make_response, mail
+from flask_mail import Mail, Message
 from app.models import User, user_schema, users_schema
 from app.models import Patient, patient_schema, patients_schema
 from app.models import Hospital, hospital_schema, hospitals_schema
@@ -90,9 +91,12 @@ def signup():
         # GO INSERT USER
         db.session.add(new_user)
         db.session.commit()
+
+        confirmation_code_msg = Message('Codigo de confirmación [SISGESMEDHIS]', sender = 'gestionmedcentesting@gmail.com', recipients = [email])
+        confirmation_code_msg.body = "Codigo de confirmación de tu cuenta : " + str(uuid)
+        mail.send(confirmation_code_msg)
         return jsonify({'message' : 'Successfully registered',
-                        'important' : 'Confirmation code was sent to your email',
-                        'confirmation_code' : uuid}), 201
+                        'important' : 'Confirmation code was sent to your email'}), 201
     else:
         return make_response('User already exists. Please Log in.', 409)
 
