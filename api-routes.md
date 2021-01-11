@@ -87,7 +87,7 @@ Data Example
 		"telphone" : "30052525252",
 		"name" : "Juan Perez",
 		"address" : "Cra 45 #100-14",
-		"id_medicalservice" : "0",
+		"id_medicalspecialty" : "0",
 		"birthdate" : "12/06/00"
 	}
 
@@ -100,7 +100,6 @@ POST /doctors/medical-histories
     {
 		"id_patient" : "1",
 		"id_patientstatus" : "1",
-		"id_specialty" : "1",
 		"observation" : "El paciente se encuentra estable"
 	}
 
