@@ -147,17 +147,21 @@ def login():
 
 @app.route('/auth/recover-password', methods=['POST'])
 def recoverPassword():
-
     auth = request.json
-    email = auth['email']
-    user = User.query\
-    .filter_by(email = email)\
-    .first()
 
-    if not email:
-        return jsonify({"message" : "Email information incomplete"}), 422
+    email = auth['email']
+    uuid = auth['uuid']
+    new_password = auth['new_password']
+    user = User.query\
+        .filter_by(email = email)\
+        .first()
+
+    if not email or not uuid:
+        return jsonify({"message" : "Recover password information incomplete"}), 422
     if user:
-        return jsonify({"message" : "Password sent to the email"}), 200
+        user.password = generate_password_hash(new_password, method='sha256')
+        db.session.commit()
+        return jsonify({"message" : "Se ha restablecido su contraseña exitosamente"}), 200
     else:
         return jsonify({"message" : "Not user found"}), 404
 
