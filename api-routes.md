@@ -29,6 +29,8 @@ Data Example
 
     {
 		"email" : "test@tests.com"
+		"uuid"  : "your-confirmation-code"
+		"new_password" : "your-new-password"
 	}
 
 PUT /auth/change-password
