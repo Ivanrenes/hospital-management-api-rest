@@ -31,7 +31,7 @@ Data Example
 		"email" : "test@tests.com"
 	}
 
-POST /auth/change-password
+PUT /auth/change-password
 Data Example
 
     {
