@@ -372,10 +372,13 @@ def getMedicalHistory(current_user):
     if current_user.rol != 1:
         return  make_response('Forbidden: Access is denied', 403)
 
+
     patient = Patient.query\
                     .filter_by(id_user = current_user.id)\
                     .first()
 
+    if not patient:
+        return jsonify({"message" : "Forbidden: Access is denied, Sign up incomplete"})
     result = medical_histories.dump(MedicalHistory.query\
                                         .filter_by(id_patient = patient.id)\
                                         .all())
