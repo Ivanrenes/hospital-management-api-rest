@@ -28,8 +28,8 @@ POST /auth/recover-password
 Data Example
 
     {
-		"email" : "test@tests.com"
-		"uuid"  : "your-confirmation-code"
+		"email" : "test@tests.com",
+		"uuid"  : "your-confirmation-code",
 		"new_password" : "your-new-password"
 	}
 
@@ -58,7 +58,7 @@ USER PATIENT
     {
 		"name" : "Alberto",
 		"address" : "Calle 55H N4-34",
-		"birthday" : "21/12/01"
+		"birthdate" : "21/12/01"
 	}
 
 USER HOSPITAL

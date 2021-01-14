@@ -13,7 +13,6 @@ from datetime import datetime, timedelta
 from functools import wraps
 
 
-random_uuid = uuid.uuid4()
 
 # decorator for verifying the JWT
 def token_required(f):
@@ -63,7 +62,7 @@ def signup():
     email = auth['email']
     password = auth['password']
     telphone = auth['telphone']
-    uuid = random_uuid
+    uuidunique = uuid.uuid4()
     account_verified = 0
     rol = auth['rol']
 
@@ -86,14 +85,14 @@ def signup():
             email,
             telphone,
             generate_password_hash(password, method='sha256'),
-            uuid, account_verified,
+            uuidunique, account_verified,
             rol)
         # GO INSERT USER
         db.session.add(new_user)
         db.session.commit()
 
         confirmation_code_msg = Message('Codigo de confirmación [SISGESMEDHIS]', sender = 'gestionmedcentesting@gmail.com', recipients = [email])
-        confirmation_code_msg.body = "Codigo de confirmación de tu cuenta : " + str(uuid)
+        confirmation_code_msg.body = "Codigo de confirmación de tu cuenta : " + str(uuidunique)
         mail.send(confirmation_code_msg)
         return jsonify({'message' : 'Successfully registered',
                         'important' : 'Confirmation code was sent to your email'}), 201
@@ -155,6 +154,9 @@ def recoverPassword():
     user = User.query\
         .filter_by(email = email)\
         .first()
+
+    if user.uuid != uuid:
+        return jsonify({"message" : "UUID does not match"}), 422
 
     if not email or not uuid:
         return jsonify({"message" : "Recover password information incomplete"}), 422
@@ -288,7 +290,7 @@ def getMedicalHistoriesByDoctorID(current_user, id_doctor):
         return  make_response('Forbidden: Access is denied', 403)
 
     result = medical_histories.dump(MedicalHistory.query\
-                                        .filter_by(id_doctor = id_doctor.id)
+                                        .filter_by(id_doctor = id_doctor)
                                         .all())
     if result:
         return jsonify({"All medical histories" : result })
@@ -314,7 +316,7 @@ def signUpDoctor(current_user):
     email = data['email']
     password = data['password']
     telphone = data['telphone']
-    uuid = random_uuid
+    uuidunique = uuid.uuid4()
     account_verified = 1
     rol = 3
 
@@ -323,7 +325,7 @@ def signUpDoctor(current_user):
         email,
         telphone,
         generate_password_hash(password, method='sha256'),
-        uuid, account_verified,
+        uuidunique, account_verified,
         rol)
     # GO INSERT USER
     db.session.add(new_user)
@@ -354,9 +356,7 @@ def signUpDoctor(current_user):
     new_doctor = Doctor(name, address, birthdate, password_changed, id_medicalspecialty, id_user, id_hospital)
     db.session.add(new_doctor)
     db.session.commit()
-    return jsonify({'message' : 'Doctor successfully registered',
-                    'important' : 'Confirmation code was sent to Doctor email',
-                    'confirmation_code' : uuid}), 201
+    return jsonify({'message' : 'Doctor registered and verified successfully'}), 201
 
 
 
