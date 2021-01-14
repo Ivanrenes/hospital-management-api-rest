@@ -16,7 +16,7 @@ from functools import wraps
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://usuario:password@localhost:5432/clinic'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://root:123456@localhost:5432/clinic'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = "I_AM_NOT_SECRET_KEY"
 
